@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TrailQuest{% endblock %}</title>
+    
+    {# Google Fonts - Preconnect for performance #}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    {# Main Stylesheet #}
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}">
+    
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <header style="border-bottom: 1px solid rgba(255,255,255,0.1); padding: 1rem 0; backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100;">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="/" style="font-size: 1.5rem; font-weight: 700; color: var(--color-brand-glow);">
+                TrailQuest
+                <span style="font-size: 0.5em; color: var(--text-secondary); font-weight: 400; margin-left: 0.5rem; vertical-align: middle;">ALPHA</span>
+            </a>
+            <nav>
+                <!-- minimal nav for now -->
+                <a href="/" style="margin-left: 1.5rem; color: var(--text-secondary); font-size: 0.9rem;">Home</a>
+                <a href="#" style="margin-left: 1.5rem; color: var(--text-secondary); font-size: 0.9rem;">Map</a>
+                <a href="#" class="btn" style="margin-left: 1.5rem; padding: 0.5rem 1rem; font-size: 0.9rem;">Sign In</a>
+            </nav>
+        </div>
+    </header>
+
+    <main style="padding: 2rem 0; min-height: 80vh;">
+        <div class="container">
+            {% block content %}
+            <!-- Default Content -->
+            <div class="card">
+                <h1>Welcome to TrailQuest</h1>
+                <p style="color: var(--text-secondary);">Start your journey here.</p>
+            </div>
+            {% endblock %}
+        </div>
+    </main>
+
+    <footer style="padding: 2rem 0; border-top: 1px solid rgba(255,255,255,0.05); margin-top: auto;">
+        <div class="container" style="text-align: center; color: var(--text-tertiary); font-size: 0.875rem;">
+            &copy; 2026 TrailQuest. All rights reserved.
+        </div>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

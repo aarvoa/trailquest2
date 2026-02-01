@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Join Game - TrailQuest{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: center; align-items: center; min-height: 60vh;">
+    <div class="card" style="width: 100%; max-width: 480px; padding: 2.5rem;">
+        <h1 style="text-align: center; margin-bottom: 2rem; font-size: 2rem;">Join the Adventure</h1>
+
+        <form action="/game/start" method="post" style="display: flex; flex-direction: column; gap: 1.5rem;">
+            <div>
+                <label for="game_id"
+                    style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.9rem;">Game
+                    ID</label>
+                <input type="text" id="game_id" name="game_id" required placeholder="e.g. GQ-1234"
+                    style="width: 100%; padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white; font-family: inherit;">
+            </div>
+
+            <div>
+                <label for="access_code"
+                    style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.9rem;">Access
+                    Code</label>
+                <input type="password" id="access_code" name="access_code" required placeholder="••••••••"
+                    style="width: 100%; padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white; font-family: inherit;">
+            </div>
+
+            <div>
+                <label for="team_name"
+                    style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.9rem;">Team
+                    Name</label>
+                <input type="text" id="team_name" name="team_name" required placeholder="The Trail Blazers"
+                    style="width: 100%; padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white; font-family: inherit;">
+            </div>
+
+            <button type="submit" class="btn" style="width: 100%; margin-top: 1rem; font-size: 1.1rem;">Play</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
