@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Step {{ step_id }} - TrailQuest{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: center; align-items: center; min-height: 60vh; flex-direction: column;">
+    <div class="card" style="width: 100%; max-width: 600px; padding: 2rem;">
+        <span
+            style="display: block; font-size: 0.9rem; color: var(--color-brand-glow); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px;">Step
+            {{ step_id }}</span>
+        <h1 style="margin-bottom: 1.5rem; font-size: 2rem;">Target Location</h1>
+
+        <p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 2rem; color: var(--text-secondary);">
+            {{ description }}
+        </p>
+
+        <a href="https://www.google.com/maps/search/?api=1&query={{ target_lat }},{{ target_lng }}" target="_blank"
+            class="btn"
+            style="display: inline-block; width: 100%; text-align: center; margin-bottom: 2rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
+            Open in Google Maps
+        </a>
+
+        <div style="background: rgba(0,0,0,0.3); padding: 1.5rem; border-radius: var(--radius-md); text-align: center;">
+            <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-bottom: 0.5rem;">Distance to Target</p>
+            <div id="distance-display" style="font-size: 2.5rem; font-weight: 700; color: white;">Calculating...</div>
+            <div id="status-msg" style="margin-top: 1rem; font-size: 0.8rem; color: var(--text-tertiary);">Waiting for
+                GPS signal...</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const targetLat = {{ target_lat }};
+    const targetLng = {{ target_lng }};
+    const redirectUrl = "/game/{{ game_id }}/step/{{ step_id }}/fact";
+    const distanceDisplay = document.getElementById('distance-display');
+    const statusMsg = document.getElementById('status-msg');
+
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371e3; // metres
+        const φ1 = lat1 * Math.PI / 180; // φ, λ in radians
+        const φ2 = lat2 * Math.PI / 180;
+        const Δφ = (lat2 - lat1) * Math.PI / 180;
+        const Δλ = (lon2 - lon1) * Math.PI / 180;
+
+        const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+            Math.cos(φ1) * Math.cos(φ2) *
+            Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return R * c; // in metres
+    }
+
+    function updatePosition(position) {
+        const userLat = position.coords.latitude;
+        const userLng = position.coords.longitude;
+
+        const dist = calculateDistance(userLat, userLng, targetLat, targetLng);
+
+        distanceDisplay.innerText = Math.round(dist) + " m";
+        statusMsg.innerText = "Tracking location...";
+
+        if (dist < 100) {
+            statusMsg.innerText = "Target reached! Redirecting...";
+            statusMsg.style.color = "var(--color-brand-glow)";
+            setTimeout(() => {
+                window.location.href = redirectUrl;
+            }, 1500);
+        }
+    }
+
+    function handleError(error) {
+        console.error(error);
+        statusMsg.innerText = "Error getting location: " + error.message;
+        statusMsg.style.color = "#ff4444";
+    }
+
+    if (navigator.geolocation) {
+        navigator.geolocation.watchPosition(updatePosition, handleError, {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0
+        });
+    } else {
+        statusMsg.innerText = "Geolocation is not supported by this browser.";
+    }
+</script>
+{% endblock %}
